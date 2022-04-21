@@ -1,0 +1,43 @@
+.form-container {
+    background-image: linear-gradient(to right, #98024c , #ff0080);
+    flex-direction: column;
+}
+
+.user-input {
+    letter-spacing: 1px;
+}
+
+.form-heading {
+    font-family: Zapf Chancery, cursive;
+    font-weight: 300;
+}
+
+.content-img {
+    height: 50px;
+
+}
+
+.suggest-link,
+.suggest-text {
+    font-size: 14px !important;
+}
+
+.btn {
+    background-image: linear-gradient(to right, #98024c , #ff0080);
+}
+
+input[type=file]::file-selector-button {
+    border: none;
+    padding: .2em .4em;
+    border-radius: .2em;
+    background-color: #d65696;
+}
+  
+input[type=file]::file-selector-button:hover {
+    opacity: 0.2;
+}
+
+
+.update-profile {
+    background-image: linear-gradient(to right, #3834af, #01c3fe);
+}
