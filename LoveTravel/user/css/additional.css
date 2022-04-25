@@ -1,43 +1,53 @@
-.form-container {
-    background-image: linear-gradient(to right, #98024c , #ff0080);
-    flex-direction: column;
+.container-right__content {
+    padding: 30px 70px 30px;
+ }
+
+ .container-right__welcome {
+     font-size: 2.6rem;
+     letter-spacing: 1.5px;
+     margin-top: 30px;
+ }
+
+ .container-right__form {
+    margin-top: 20px;
+} 
+
+.form-btn {
+    margin-top: 10px;
 }
 
-.user-input {
-    letter-spacing: 1px;
-}
-
-.form-heading {
-    font-family: Zapf Chancery, cursive;
-    font-weight: 300;
-}
-
-.content-img {
-    height: 50px;
-
-}
-
-.suggest-link,
-.suggest-text {
-    font-size: 14px !important;
-}
-
-.btn {
-    background-image: linear-gradient(to right, #98024c , #ff0080);
-}
-
-input[type=file]::file-selector-button {
-    border: none;
-    padding: .2em .4em;
-    border-radius: .2em;
-    background-color: #d65696;
-}
-  
-input[type=file]::file-selector-button:hover {
-    opacity: 0.2;
-}
-
+/* update profile */
 
 .update-profile {
-    background-image: linear-gradient(to right, #3834af, #01c3fe);
+    background-image: url(../../assets/img/profile-background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    padding: 40px 300px;
 }
+
+.update-profile__content {
+    border-radius: 12px;
+    background-color: var(--white-color);
+    padding: 50px 70px;
+}
+
+.update-profile__heading {
+    font-weight: bold;
+    color: #029e91;
+    font-size: 2.4rem;
+}
+
+.update-profile__img {
+    height: 200px;
+    width: 220px;
+    margin-right: 40px;
+    border-radius: 50%;
+}
+
+.update-profile__img-btn {
+    display: block;
+}
+
+

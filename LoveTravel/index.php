@@ -38,7 +38,7 @@
         
                             <ul class="navbar__list hide-on-tablet-mobile">
                                 <li class="navbar__item">
-                                    <a href="index.html" class="navbar__item-link">HOME</a>
+                                    <a href="index.php" class="navbar__item-link">HOME</a>
                                 </li>
                                 <li class="navbar__item">
                                     <a href="#" class="navbar__item-link">PACKAGES</a>
@@ -1046,7 +1046,7 @@
                                     <div class="package__item-description">
                                         <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
                                     </div>
-                                    <div class="btn package__item-btn package__item-btn--yellow">ADD</div>
+                                    <a href="./user/login.php" class="btn package__item-btn package__item-btn--yellow">ADD</a>
                                 </div>
                             </div>
                         </div>
@@ -1085,7 +1085,7 @@
                                     <div class="package__item-description">
                                         <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
                                     </div>
-                                    <div class="btn package__item-btn package__item-btn--red">ADD</div>
+                                    <a href="./user/login.php" class="btn package__item-btn package__item-btn--red">ADD</a>
                                 </div>
                             </div>
                         </div>
@@ -1124,7 +1124,7 @@
                                     <div class="package__item-description">
                                         <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
                                     </div>
-                                    <div class="btn package__item-btn package__item-btn--purple">ADD</div>
+                                    <a href="./user/login.php" class="btn package__item-btn package__item-btn--purple">ADD</a>
                                 </div>
                             </div>
                         </div>
@@ -1261,7 +1261,7 @@
             </div>
         </div>
         <div class="buy hide-on-tablet-mobile">
-            <a href="#" class="buy-main">
+            <a href="./user/login.php" class="buy-main">
                 <i class="ti-shopping-cart buy-main-icon"></i>
             </a>
             <div class="buy-sub">

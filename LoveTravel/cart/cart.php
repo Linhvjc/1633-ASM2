@@ -1,43 +1,124 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['giohang'])) $_SESSION['giohang']=[];
+    //làm rỗng giỏ hàng
+    if(isset($_GET['delcart'])&&($_GET['delcart']==1)) unset($_SESSION['giohang']);
+    //xóa sp trong giỏ hàng
+    if(isset($_GET['delid'])&&($_GET['delid']>=0)){
+       array_splice($_SESSION['giohang'],$_GET['delid'],1);
+    }
+    //lấy dữ liệu từ form
+    if(isset($_POST['addcart'])&&($_POST['addcart'])){
+        $hinh=$_POST['hinh'];
+        $tensp=$_POST['tensp'];
+        $gia=$_POST['gia'];
+        $soluong=$_POST['soluong'];
+
+        //kiem tra sp co trong gio hang hay khong?
+
+        $fl=0; //kiem tra sp co trung trong gio hang khong?
+
+        for ($i=0; $i < sizeof($_SESSION['giohang']); $i++) { 
+            
+            if($_SESSION['giohang'][$i][1]==$tensp){
+                $fl=1;
+                $soluongnew=$soluong+$_SESSION['giohang'][$i][3];
+                $_SESSION['giohang'][$i][3]=$soluongnew;
+                break;
+
+            }
+            
+        }
+        //neu khong trung sp trong gio hang thi them moi
+        if($fl==0){
+            //them moi sp vao gio hang
+            $sp=[$hinh,$tensp,$gia,$soluong];
+            $_SESSION['giohang'][]=$sp;
+        }
+
+       // var_dump($_SESSION['giohang']);
+    }
+
+    function showgiohang(){
+        if(isset($_SESSION['giohang'])&&(is_array($_SESSION['giohang']))){
+            if(sizeof($_SESSION['giohang'])>0){
+                $tong=0;
+                for ($i=0; $i < sizeof($_SESSION['giohang']); $i++) { 
+                    $tt=$_SESSION['giohang'][$i][2] * $_SESSION['giohang'][$i][3];
+                    $tong+=$tt;
+                    echo '<tr>
+                            <td>'.($i+1).'</td>
+                            <td><img src="./images/'.$_SESSION['giohang'][$i][0].'" alt=""></td>
+                            <td>'.$_SESSION['giohang'][$i][1].'</td>
+                            <td>'.$_SESSION['giohang'][$i][2].'</td>
+                            <td>'.$_SESSION['giohang'][$i][3].'</td>
+                            <td>
+                                <div>'.$tt.'</div>
+                            </td>
+                            <td ">
+                                <a style="color: red;" href="cart.php?delid='.$i.'">Delete</a>
+                            </td>
+                        </tr>';
+                }
+                echo '<tr>
+                        <th style="color: red;" colspan="5">Total</th>
+                        <th>
+                            <div style="color: red;">'.$tong.'</div>
+                        </th>
+    
+                    </tr>';
+            }else{
+                echo '<span style="color: red; font-size: 18px;">Cart is empty!</span>';
+            }    
+        }
+    }
+    
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../../assets/img/Icon.jpg">
+    <title>Shopping Cart | View Cart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="../assets/img/Icon.jpg">
 
     <!-- reset css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     
-    <link rel="stylesheet" href="../../assets/css/base.css">
-    <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/destination.css">
-    <link rel="stylesheet" href="../../assets/css/grid.css">
-    <link rel="stylesheet" href="../../assets/css/responsive.css">
-    <link rel="stylesheet" href="../../assets/css/destinationresponsive.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/destination.css">
+    <link rel="stylesheet" href="../assets/css/grid.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="stylesheet" href="../assets/css/destinationresponsive.css">
      <!-- fa icon -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     
      <!-- Themify icon -->
-     <link rel="stylesheet" href="../../assets/themify-icons/themify-icons.css">
+     <link rel="stylesheet" href="../assets/themify-icons/themify-icons.css">
      <!-- Roboto font -->
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-     <title>Love Travel - Destination</title>
 </head>
+
 <body>
     <div class="web">
         <!-- Header -->
-        <header class="header-destination" style="background-image: url(../../assets/img/header-background-destination6.jpg);">
+        <header class="header-destination" style="background-image: url(../assets/img/cartbr.jpg);">
             <div class="navbar">
                 <div class="grid wide navbar--grid">
                     <div class="row navbar--wrap">
-                        <a href="../index.html" class="navbar__logo-link">
-                            <img src="../../assets/img/homelogo.png" alt="" class="navbar__logo-img">
+                        <a href="../entered/html/index.php" class="navbar__logo-link">
+                            <img src="../assets/img/homelogo.png" alt="" class="navbar__logo-img">
                         </a>
     
                         <ul class="navbar__list hide-on-tablet-mobile">
                             <li class="navbar__item">
-                                <a href="../index.html" class="navbar__item-link">HOME</a>
+                                <a href="../entered/html/index.php" class="navbar__item-link">HOME</a>
                             </li>
                             <li class="navbar__item">
                                 <a href="#" class="navbar__item-link">PACKAGES</a>
@@ -415,22 +496,41 @@
                                 </ul>
                             </li>
                         </ul>
-                        <a href="./booknow.html" class="btn btn-purple hide-on-tablet-mobile">
+                        <a href="../entered/html/booknow.php" class="btn btn-purple hide-on-tablet-mobile">
                             <span>BOOK NOW</span>
                         </a>
                         
                         <div class="navbar-user">
-                            <img class="navbar-user__img" src="../../assets/img/user.png" alt="">
+                            
+                            <?php
+                                include '../../user/config.php';
+                                $user_id = $_SESSION['user_id'];
+                                $select = mysqli_query($conn, "SELECT * FROM `user_form` WHERE id = '$user_id'") or die('query failed');
+                                if(mysqli_num_rows($select) > 0){
+                                    $fetch = mysqli_fetch_assoc($select);
+                                }
+                            ?>
+
+                            <form action="" method="post" enctype="multipart/form-data">
+                            <?php
+                                if($fetch['image'] == ''){
+                                    echo '<img class="navbar-user__img" src="../user/images/default-avatar.png">';
+                                }else{
+                                    echo '<img class="navbar-user__img" src="../user/uploaded_img/'.$fetch['image'].'">';
+                                }                                   
+                            ?>
+                            </form>
+
                             <ul class="navbar-user__list">
                                 <li class="navbar-user__item">
-                                    <a href="" class="navbar-user__item-link">My profile</a>
+                                    <a href="../user/update_profile.php" class="navbar-user__item-link">My profile</a>
                                 </li>
                                 <li class="navbar-user__item navbar-user__item--red">
-                                    <a href="../../user/logout.php" class="navbar-user__item-link navbar-user__item-link--red">Log out</a>
+                                    <a href="../user/logout.php" class="navbar-user__item-link navbar-user__item-link--red">Log out</a>
                                 </li>
                             </ul>
                         </div>
-
+                        
     
                         <label for="option-checkbox" class="navbar__option">
                             <i class="ti-align-justify navbar__option-icon"></i>
@@ -451,7 +551,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package1.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package1.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Berlin</span>
@@ -464,7 +564,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package2.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package2.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Hong Kong</span>
@@ -477,7 +577,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package3.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package3.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">San Francisco</span>
@@ -492,14 +592,14 @@
                                 <div class="navbar__option-destination-child">
                                     <div class="destination-child ">
                                         <div class="destination-container">
-                                            <div style="background-image: url(../../assets/img/destination-1.jpg);" class="destination-item__background">
+                                            <div style="background-image: url(../assets/img/destination-1.jpg);" class="destination-item__background">
                                                 <div class="destination-item">
                                                     <div class="destination-item__text">
                                                         <div class="destination-item__name">Europe</div>
                                                         <div class="destination-item__package">3 PACKAGES</div>
                                                     </div>
                                                     <div class="destination-item__icon">
-                                                        <img src="../../assets/img/destination_icon1.png" alt="" class="destination-item__icon-img">
+                                                        <img src="../assets/img/destination_icon1.png" alt="" class="destination-item__icon-img">
                                                     </div>
                                                 </div>
                                             </div>
@@ -533,7 +633,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package4.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package4.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Tuscany</span>
@@ -546,7 +646,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package5.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package5.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Amsterdam</span>
@@ -559,7 +659,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../../assets/img/package6.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../assets/img/package6.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Phuket</span>
@@ -579,262 +679,50 @@
     
             <div class="grid wide  ">
                 <div class="header-destination-title">
-                    <span class="header-destination-title-text">United States</span>
+                    <span class="header-destination-title-text">Cart</span>
                 </div>
             </div>
         </header>
 
         
         <!-- body -->
-        <div class="body-destination">
-            <div class="body-content">
-                <div class="grid wide">
-                    <div class="row">
-                        <div class="body-description col l-8 m-12 c-12">
-                            <div class="body-description-section">
-                                <div class="body-description-child">
-                                    <span class="body-description-left">A</span>
-                                    <span class="body-description-right">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum dapibus, odio sit amet convallis sollicitudin, lacus</span>
-                                </div>
-                                <span class="body-description-child body-description-child-text">
-                                    Nullam porta magna non turpis iaculis, sit amet rutrum velit scelerisque. Duis sed pretium neque. Fusce aliquam enim blandit augue tristique suscipit. Etiam eget
-                                </span>
+        <div class="cart-content">
+            <div class="grid wide">
+                <div class="row">
+                    <div class="cart-table">
+                        <div class="">
+                            <div class="">
+                                <table>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Image</th>
+                                        <th>Tour name</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th style="text-align: right;">Total ($)</th>
+                                    </tr>
+                                    <?php showgiohang(); ?>
+                                </table>
                             </div>
-    
-                            <div class="body-description-section">
-                                <span class="body-description-bottom">Vivamus volutpat linh eros pulvinar velit laoreet, sit tinh amet egestas erat dignissim. Sed quis rutrum tellus, sit amet viverra felis. Cras sagittis sem sit amet urna feugiat rutrum. Nam nulla ipsum, venenatis malesuada felis quis, ultricies convallis neque. Pellentesque tristique fringilla tempus.</span>
-                            </div>
-                        </div>
-    
-                        <div class="body-info col l-4 m-12 c-12">
-                            <div class="body-info__container">
-                                <div class="body-info__item">
-                                    <div class="body-info__item-photo">
-                                        <img src="../../assets/img/type-info1.png" alt="" class="body-info__item-img">
-                                    </div>
-                                    <div class="body-info__item-info">
-                                        <span class="body-info__item-info-heading">PACKAGES</span>
-                                        <span class="body-info__item-info-description">1 Tours in United States</span>
-                                    </div>
-                                </div>
-    
-                                <div class="body-info__item">
-                                    <div class="body-info__item-photo">
-                                        <img src="../../assets/img/type-info2.svg" alt="" class="body-info__item-img">
-                                    </div>
-                                    <div class="body-info__item-info">
-                                        <span class="body-info__item-info-heading">United States</span>
-                                        <span class="body-info__item-info-description">Check the best Tours</span>
-                                    </div>
-                                </div>
-    
-                                <div class="body-info__item">
-                                    <div class="body-info__item-photo">
-                                        <img src="../../assets/img/type-info3.svg" alt="" class="body-info__item-img">
-                                    </div>
-                                    <div class="body-info__item-info">
-                                        <span class="body-info__item-info-heading">Contact Us</span>
-                                        <span class="body-info__item-info-description">lovetravel@theme.com</span>
-                                    </div>
-                                </div>
-    
+                            <div class="cart-btn__container">
+                                <input class="cart-btn__item" type="submit" value="Accept the order" name="dongydathang">
+                                <a href="cart.php?delcart=1"><input class="cart-btn__item" type="button" value="Clear all items"></a>
+                                <a href="../entered/html/booknow.php"><input class="cart-btn__item" type="button" value="Continue ordering"></a>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
-    
-            <div class="package">
-                <div class="grid wide">
-                    <div class="row">
-                        <div class="package__title">
-                            <span class="package__title-sub">EUROPE</span>
-                            <span class="package__title-main">PACKAGES</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package3.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--purpule">
-                                        <img src="../../assets/img/destination_icon6.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">San Francisco</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">United States</span>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">SPORT</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div class="package__item-detail-type-icon package__item-detail-type-icon--purple">+ 1</div>
-                                            </div>
-                                        </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">400 $</div>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div class="btn package__item-btn package__item-btn--purple">ADD</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
         </div>
-
 
         <!-- Footer -->
-        <div style="background-image: url(../../assets/img/footer-background.jpg);" class="footer">
-            <div class="grid wide">
-                <div class="row footer-with-search-container">
-                    <div class="footer-with-search">
-                        <div class="footer-with-search__text">
-                            <span class="footer-with-search__text-sub">KEEP IN TOUCH</span>
-                            <span class="footer-with-search__text-main">Travel with Us</span>
-                        </div>
-                        <div class="footer-with-search__search">
-                            <input type="text" name="" required id="footer-with-search__search-require" class="footer-with-search__search-input">
-                            <label for="footer-with-search__search-require" class="btn footer-with-search__search-btn">SEND</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="grid__full-width">
-                        <div class="footer-container">
-                            <div class="footer-social">
-                                <img src="../../assets/img/logo-footer.png" alt="" class="footer-social__logo">
-                                <span class="footer-social__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut diam et nibh condimentum venenatis eu ac magnasin. Quisque interdum est mauris, eget ullamcorper.</span>
-                                <div class="footer-social__icon">
-                                    <a href="#" class="footer-social__icon-link">
-                                        <i class="footer-social__icon-link-item ti-twitter-alt"></i>
-                                    </a>
-                                    <a href="#" class="footer-social__icon-link">
-                                        <i class="footer-social__icon-link-item fab fa-youtube"></i>
-                                    </a>
-                                    <a href="#" class="footer-social__icon-link">
-                                        <i class="footer-social__icon-link-item fab fa-facebook-square"></i>
-                                    </a>
-                                    <a href="#" class="footer-social__icon-link">
-                                        <i class="footer-social__icon-link-item ti-vimeo-alt"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="footer-service">
-                                    <div class="footer-service__item">
-                                        <span class="footer-service__item-heading">OUR AGENCY</span>
-                                        <ul class="footer-service__item-list">
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Services</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Insurancee</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Agency</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Tourism</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Payment</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="footer-service__item">
-                                        <span class="footer-service__item-heading">PARTNERS</span>
-                                        <ul class="footer-service__item-list">
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Booking</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">RentalCar</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">HostelWorld</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Trivago</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">TripAdvisor</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="footer-service__item">
-                                        <span class="footer-service__item-heading">LAST MINUTE</span>
-                                        <ul class="footer-service__item-list">
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">London</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">California</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Indonesia</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Europe</span>
-                                            </li>
-                                            <li class="footer-service__item-child">
-                                                <i class="footer-service__item-child-icon ti-angle-right"></i>
-                                                <span class="footer-service__item-child-text">Oceania</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="grid__full-width">
-                        <div class="copyright">
-                            <span class="copyright-text">THE BEST WORDPRESS TRAVEL THEME</span>
-                            <span class="copyright-text">COPYRIGHT NICDARK THEMES 2018</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="buy hide-on-tablet-mobile">
-            <div class="buy-main">
-                <i class="ti-shopping-cart buy-main-icon"></i>
-            </div>
-            <div class="buy-sub">
-                <i class="fas fa-fire buy-sub-icon"></i>
-            </div>
-        </div>
+        
     </div>
 
+    
+
+
 </body>
+
 </html>

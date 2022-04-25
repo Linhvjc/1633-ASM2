@@ -1,3 +1,40 @@
+<?php
+    session_start();
+    $logined=0;
+    if(!isset($_SESSION['luottruycap'])) $_SESSION['luottruycap']=0;
+    else $_SESSION['luottruycap']+=1;
+
+    if(isset($_COOKIE['user'])&&isset($_COOKIE['pass'])){
+        echo "Cookie đã đăng ký là: ".$_COOKIE['user']." - ".$_COOKIE['pass'];
+    }
+
+    if(isset($_GET['delc'])&&($_GET['delc']==1)){
+        setcookie("user","",time()-(86400*7));
+        setcookie("pass","",time()-(86400*7));
+        echo "<br><font color='red'>Bạn đã xóa cookie</font>";
+    }
+
+    if(isset($_POST['login'])&&($_POST['login'])){
+        $user=$_POST['user'];
+        $pass=$_POST['pass'];
+        if(($user=="demo")&&($pass=="demo")){
+            $_SESSION['user']=$user;
+            $_SESSION['pass']=$pass;
+            $logined=1;
+            $msg= "<br><font color='blue'>Các bạn đăng nhập thành công</font>";
+        }else{
+            $logined=0;
+            $msg= "<br><font color='red'>Vui lòng đăng nhập</font>";
+        }
+        if(isset($_POST['ghinho'])&&($_POST['ghinho'])){
+            setcookie("user",$user,time()+(86400*7));
+            setcookie("pass",$pass,time()+(86400*7));
+            $msgcookie="<br>Đã ghi nhận cookie!";
+        }
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,10 +48,10 @@
     
     <link rel="stylesheet" href="../../assets/css/base.css">
     <link rel="stylesheet" href="../../assets/css/main.css">
-    <link rel="stylesheet" href="../../assets/css/booknow.css">
+    <link rel="stylesheet" href="../../assets/css/destination.css">
     <link rel="stylesheet" href="../../assets/css/grid.css">
     <link rel="stylesheet" href="../../assets/css/responsive.css">
-    <link rel="stylesheet" href="../../assets/css/booknowresponsive.css">
+    <link rel="stylesheet" href="../../assets/css/destinationresponsive.css">
      <!-- fa icon -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     
@@ -22,23 +59,22 @@
      <link rel="stylesheet" href="../../assets/themify-icons/themify-icons.css">
      <!-- Roboto font -->
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-     <title>Love Travel - Booknow</title>
+     <title>Love Travel - History</title>
 </head>
 <body>
     <div class="web">
         <!-- Header -->
-        <header class="header">
-            <!-- Navber -->
+        <header class="header-destination" style="background-image: url(../../assets/img/history-background.jpg);">
             <div class="navbar">
                 <div class="grid wide navbar--grid">
                     <div class="row navbar--wrap">
-                        <a href="../index.html" class="navbar__logo-link">
+                        <a href="index.php" class="navbar__logo-link">
                             <img src="../../assets/img/homelogo.png" alt="" class="navbar__logo-img">
                         </a>
     
                         <ul class="navbar__list hide-on-tablet-mobile">
                             <li class="navbar__item">
-                                <a href="../index.html" class="navbar__item-link">HOME</a>
+                                <a href="index.php" class="navbar__item-link">HOME</a>
                             </li>
                             <li class="navbar__item">
                                 <a href="#" class="navbar__item-link">PACKAGES</a>
@@ -416,28 +452,48 @@
                                 </ul>
                             </li>
                         </ul>
-                        <a href="./booknow.html" class="btn btn-purple hide-on-tablet-mobile">
+                        <a href="./booknow.php" class="btn btn-purple hide-on-tablet-mobile">
                             <span>BOOK NOW</span>
                         </a>
                         
                         <div class="navbar-user">
-                            <img class="navbar-user__img" src="../../assets/img/user.png" alt="">
+                            
+                            <?php
+                                include '../../user/config.php';
+                                $user_id = $_SESSION['user_id'];
+                                $select = mysqli_query($conn, "SELECT * FROM `user_form` WHERE id = '$user_id'") or die('query failed');
+                                if(mysqli_num_rows($select) > 0){
+                                    $fetch = mysqli_fetch_assoc($select);
+                                }
+                            ?>
+
+                            <form action="" method="post" enctype="multipart/form-data">
+                            <?php
+                                if($fetch['image'] == ''){
+                                    echo '<img class="navbar-user__img" src="../../user/images/default-avatar.png">';
+                                }else{
+                                    echo '<img class="navbar-user__img" src="../../user/uploaded_img/'.$fetch['image'].'">';
+                                }                                   
+                            ?>
+                            </form>
+
                             <ul class="navbar-user__list">
                                 <li class="navbar-user__item">
-                                    <a href="" class="navbar-user__item-link">My profile</a>
+                                    <a href="../../user/update_profile.php" class="navbar-user__item-link">My profile</a>
                                 </li>
                                 <li class="navbar-user__item navbar-user__item--red">
                                     <a href="../../user/logout.php" class="navbar-user__item-link navbar-user__item-link--red">Log out</a>
                                 </li>
                             </ul>
                         </div>
+                        
     
                         <label for="option-checkbox" class="navbar__option">
                             <i class="ti-align-justify navbar__option-icon"></i>
                         </label>
-
+    
                         <input type="checkbox" hidden class="navbar__option-checkbox" id="option-checkbox">
-
+    
                         <div class="navbar__option-list">
                             <div class="navbar__option-list-content">
                                 <div class="navbar__option-close-container">
@@ -488,7 +544,7 @@
                                         <div style="background: linear-gradient(to right, #ba71da 0%, #da717b 100%);" class="btn navbar__option-destination-btn">FROM 400$</div>
                                     </div>
                                 </div>
-
+    
                                 <div class="navbar__option-destination-child">
                                     <div class="destination-child ">
                                         <div class="destination-container">
@@ -576,424 +632,175 @@
                     </div>
                 </div>
             </div>
-
-
-            
-            <div class="header-content">
-                <div class="grid wide">
-                    <div class="header-content__title-sub">
-                        <span class="header-content__title-sub-text">OUR PACKAGES</span>
-                    </div>
-                    <div class="header-content__title-main">
-                        <span class="header-content__title-main-text">Search your</span>
-                        <span class="header-content__title-main-text-additional">Holiday</span>
-                    </div>
-
-                    <div class="header-option">
-                        <div class="header-option__content">
-                            
-                            <div class="header-option__child">
-                                <label for="select-destination" class="header-option__child-label-text">Select Your Destination :</label>
-                                <div class="header-option__child-input header-option__child-input-1">
-                                    <select name="" id="select-destination" class="header-option__child-select-destination">
-                                        <option value="">All destination</option>
-                                        <option value="">Europe</option>
-                                        <option value=""> - Italy</option>
-                                        <option value=""> - Netherlands</option>
-                                        <option value="">Asia</option>
-                                        <option value=""> - Thailandia</option>
-                                        <option value="">United States</option>
-                                        <option value="">Oceania</option>
-                                    </select>
-                                    <i class="ti-location-pin header-option__child-input-icon"></i>
-                                </div>
-                            </div>
-                            <div class="header-option__child">
-                                <label for="select-date" class="header-option__child-label-text">Select Your Date :</label>
-                                <div class="header-option__child-input">
-                                    <input type="date" name="" id="select-date" class="header-option__child-input-select-date">
-                                </div>
-                            </div>
-                            <div class="header-option__child">
-                                <div class="header-option__child-label header-option__child-label-3">
-                                    <label for="" class="header-option__child-label-text">Max Price :</label>
-                                    <span class="header-option__child-label-max-price">5000$</span>
-                                </div>
-                                <div class="header-option__child-arrange">
-                                    <div class="header-option__child-arrange1"></div>
-                                    <div class="header-option__child-arrange2"></div>
-                                </div>
-                                <div class="header-option__child-choose">
-                                    <input type="checkbox" name="" id="" class="header-option__child-checkbox">
-                                    <span class="header-option__child-choose-text">See only promotions</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="header-option-more">
-                            <div class="btn header-option-more__btn">
-                                <i class="ti-filter header-option-more__btn-icon"></i>
-                                <span class="header-option-more__btn-text">MORE FILTER</span>
-                            </div>
-                            <div class="header-option-more-additional">
-                                <div class="header-option-more-container">
-                                    <div class="header-option-more-section">
-                                        <span class="header-option-more-heading">Typologies :</span>
-                                        <ul class="header-option-more__list">
-                                            <li class="header-option-more__item">
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">Relax</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">Cultural</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">Sport</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">History</span>
-                                                </div>
-                                            </li>                               
-                                        </ul>
-                                    </div>
-                                    <div class="header-option-more-section">
-                                        <span class="header-option-more-heading">Durations :</span>
-                                        <ul class="header-option-more__list">
-                                            <li class="header-option-more__item">
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">1 - 3 Days</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">3 - 6 Days</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">6 - 9 Days</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">9 - 12 Days</span>
-                                                </div>
-                                            </li>                               
-                                        </ul>
-                                    </div>
-                                    <div class="header-option-more-section">
-                                        <span class="header-option-more-heading">Difficulty :</span>
-                                        <ul class="header-option-more__list">
-                                            <li class="header-option-more__item">
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">High</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">Low</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">Medium</span>
-                                                </div>
-                                            </li>                               
-                                        </ul>
-                                    </div>
-                                    <div class="header-option-more-section">
-                                        <span class="header-option-more-heading">Min Age :</span>
-                                        <ul class="header-option-more__list">
-                                            <li class="header-option-more__item">
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">10 Years</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">18 Years</span>
-                                                </div>
-                                                <div class="header-option-more__child">
-                                                    <input type="checkbox" class="header-option-more__child-input">
-                                                    <span class="header-option-more__child-text">3 Years</span>
-                                                </div>
-                                                
-                                            </li>                               
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="header-select hide-on-tablet-mobile">
-                        <div class="header-select-container">
-                            <span class="header-select-text">PRICE</span>
-                            <i class="ti-angle-down header-select-icon"></i>
-                            <ul class="header-select-list">
-                                <li class="header-select-item">LOWEST PRICE</li>
-                                <li class="header-select-item">HIGHEST PRICE</li>
-                            </ul>
-                        </div>
-                        <div class="header-select-container">
-                            <span class="header-select-text">NAME</span>
-                            <i class="ti-angle-down header-select-icon"></i>
-                            <ul class="header-select-list">
-                                <li class="header-select-item">DESC</li>
-                                <li class="header-select-item">ASC</li>
-                            </ul>
-                        </div>
-                    </div>
+    
+            <div class="grid wide  ">
+                <div class="header-destination-title">
+                    <span class="header-destination-title-text">History</span>
                 </div>
             </div>
         </header>
+
+        
+        <!-- body -->
+        <div class="body-destination">
+            
     
-        <!-- Body -->
-        <div class="content">
             <div class="package">
                 <div class="grid wide">
                     <div class="row">
+                        <!-- Hong kong -->
                         <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package1.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--yellow">
-                                        <img src="../../assets/img/destination_icon1.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Berlin</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Europe</span>
+                            <form action="../../cart/cart.php" method ="post">
+                                <input type="hidden" name="tensp" value="Hong Kong">
+                                <input type="hidden" name="gia" value="500">
+                                <input type="hidden" name="hinh" value="../../assets/img/package2.jpg">
+                                <div class="package__item">
+                                    <div class="package__item-img">
+                                        <img src="../../assets/img/package2.jpg" alt="" class="package__item-img-background">
+                                        <div class="package__item-img-icon-container package__item-img-icon-container--red">
+                                            <img src="../../assets/img/destination_icon3.png" alt="" class="package__item-img-icon">
                                         </div>
                                     </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">CULTURAL</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div class="package__item-detail-type-icon package__item-detail-type-icon--yellow">+ 1</div>
+                                    <div class="package__item-text">
+                                        <div class="package__item-heading">
+                                            <span class="package__item-heading-country">Hong Kong</span>
+                                            <div class="package__item-heading-area">
+                                                <i class="package__item-heading-area-icon ti-location-pin"></i>
+                                                <span class="package__item-heading-area-text">Asia</span>
                                             </div>
                                         </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">700 $</div>
+                                        <div class="package__item-detail">
+                                            <div class="package__item-detail-type">
+                                                <div class="package__item-detail-type-line">
+                                                    <span class="package__item-detail-type-line-text">HISTORY</span>
+                                                    <div class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                                <div class="package__item-detail-type-line package__item-detail-type-line--addition">
+                                                    <span class="package__item-detail-type-line-text">CULTURAL</span>
+                                                    <div class="package__item-detail-type-icon package__item-detail-type-icon--red">+ 1</div>
+                                                </div>
+                                            </div>
+                                            <div class="package__item-detail-price">
+                                                <div class="package__item-detail-price-old">1000</div>
+                                                <div class="package__item-detail-price-current">500 $</div>
+                                            </div>
+                                        </div>
+                                        <div class="package__item-description">
+                                            <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
+                                        </div>
+                                        <div class="addcart-container">
+                                            <input type="submit" name="addcart" class="btn package__item-btn package__item-btn--red" value="ADD">
+                                            <input class="addcart-quantity" type="number" name="soluong" min="1" max="10" value="1">
                                         </div>
                                     </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div class="btn package__item-btn package__item-btn--yellow">ADD</div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
+                        <!-- Phuket -->
                         <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package2.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--red">
-                                        <img src="../../assets/img/destination_icon3.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Hong Kong</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Asia</span>
+                            <form action="../../cart/cart.php" method ="post">
+                                <input type="hidden" name="tensp" value="Phuket">
+                                <input type="hidden" name="gia" value="1200">
+                                <input type="hidden" name="hinh" value="../../assets/img/package7.jpg">
+                                <div class="package__item">
+                                    <div class="package__item-img">
+                                        <img src="../../assets/img/package7.jpg" alt="" class="package__item-img-background">
+                                        <div style="background: linear-gradient(to right, #14b9d5 0%, #14d5b1 100%);" class="package__item-img-icon-container ">
+                                            <img src="../../assets/img/destination_icon2.png" alt="" class="package__item-img-icon">
                                         </div>
                                     </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">HISTORY</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">CULTURAL</span>
-                                                <div class="package__item-detail-type-icon package__item-detail-type-icon--red">+ 1</div>
+                                    <div class="package__item-text">
+                                        <div class="package__item-heading">
+                                            <span class="package__item-heading-country">Phuket</span>
+                                            <div class="package__item-heading-area">
+                                                <i class="package__item-heading-area-icon ti-location-pin"></i>
+                                                <span class="package__item-heading-area-text">Thailandia</span>
                                             </div>
                                         </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old">1000</div>
-                                            <div class="package__item-detail-price-current">500 $</div>
+                                        <div class="package__item-detail">
+                                            <div class="package__item-detail-type">
+                                                <div class="package__item-detail-type-line">
+                                                    <span class="package__item-detail-type-line-text">CULTURAL</span>
+                                                    <div class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                                <div class="package__item-detail-type-line package__item-detail-type-line--addition">
+                                                    <span class="package__item-detail-type-line-text">RELAX</span>
+                                                    <div style="background-color: #14b9d5;" class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                            </div>
+                                            <div class="package__item-detail-price">
+                                                <div class="package__item-detail-price-old"></div>
+                                                <div class="package__item-detail-price-current">1200 $</div>
+                                            </div>
+                                        </div>
+                                        <div class="package__item-description">
+                                            <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
+                                        </div>
+                                        <div class="addcart-container">
+                                            <input style="background-color: #14b9d5;" type="submit" name="addcart" class="btn package__item-btn" value="ADD">
+                                            <input class="addcart-quantity" type="number" name="soluong" min="1" max="10" value="1">
                                         </div>
                                     </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div class="btn package__item-btn package__item-btn--red">ADD</div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
+                        <!-- Amsterdam -->
                         <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package3.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--purpule">
-                                        <img src="../../assets/img/destination_icon6.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">San Francisco</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">United States</span>
+                            <form action="../../cart/cart.php" method ="post">
+                                <input type="hidden" name="tensp" value="Amsterdam">
+                                <input type="hidden" name="gia" value="1500">
+                                <input type="hidden" name="hinh" value="../../assets/img/package8.jpg">
+                                <div class="package__item">
+                                    <div class="package__item-img">
+                                        <img src="../../assets/img/package8.jpg" alt="" class="package__item-img-background">
+                                        <div style="background: linear-gradient(to right, #f3a46b 0%, #f3c96b 100%);" class="package__item-img-icon-container package__item-img-icon-container--blue">
+                                            <img src="../../assets/img/destination_icon5.png" alt="" class="package__item-img-icon">
                                         </div>
                                     </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">SPORT</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div class="package__item-detail-type-icon package__item-detail-type-icon--purple">+ 1</div>
+                                    <div class="package__item-text">
+                                        <div class="package__item-heading">
+                                            <span class="package__item-heading-country">Amsterdam</span>
+                                            <div class="package__item-heading-area">
+                                                <i class="package__item-heading-area-icon ti-location-pin"></i>
+                                                <span class="package__item-heading-area-text">Netherlands</span>
                                             </div>
                                         </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">400 $</div>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div class="btn package__item-btn package__item-btn--purple">ADD</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package7.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--blue">
-                                        <img src="../../assets/img/destination_icon2.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Phuket</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Thailandia</span>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">CULTURAL</span>
-                                                <div  class="package__item-detail-type-icon">+ 1</div>
+                                        <div class="package__item-detail">
+                                            <div class="package__item-detail-type">
+                                                <div class="package__item-detail-type-line">
+                                                    <span class="package__item-detail-type-line-text">HISTORY</span>
+                                                    <div class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                                <div class="package__item-detail-type-line package__item-detail-type-line--addition">
+                                                    <span class="package__item-detail-type-line-text">CULTURAL</span>
+                                                    <div style="background-color: #f3a46b;" class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
                                             </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div style="background-color: #14b9d5;" class="package__item-detail-type-icon package__item-detail-type-icon--yellow">+ 1</div>
+                                            <div class="package__item-detail-price">
+                                                <div class="package__item-detail-price-old"></div>
+                                                <div class="package__item-detail-price-current">1500 $</div>
                                             </div>
                                         </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">1200 $</div>
+                                        <div class="package__item-description">
+                                            <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
                                         </div>
-                                    </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div style="background-color: #14b9d5;" class="btn package__item-btn package__item-btn--yellow">ADD</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package8.jpg" alt="" class="package__item-img-background">
-                                    <div style="background: linear-gradient(to right, #f3a46b 0%, #f3c96b 100%);" class="package__item-img-icon-container">
-                                        <img src="../../assets/img/destination_icon5.png" alt="" class="package__item-img-icon">
+                                        <div class="addcart-container">
+                                            <input style="background-color: #f3a46b;" type="submit" name="addcart" class="btn package__item-btn" value="ADD">
+                                            <input class="addcart-quantity" type="number" name="soluong" min="1" max="10" value="1">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Amsterdam</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Netherlands</span>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">HISTORY</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">CULTURAL</span>
-                                                <div style="background-color: #f3a46b;" class="package__item-detail-type-icon package__item-detail-type-icon--red">+ 1</div>
-                                            </div>
-                                        </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">1500 $</div>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div style="background-color: #f3a46b;" class="btn package__item-btn package__item-btn--red">ADD</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../../assets/img/package9.jpg" alt="" class="package__item-img-background">
-                                    <div style=" background: linear-gradient(to right, #1bbc9b 0%, #1bbc63 100%);" class="package__item-img-icon-container package__item-img-icon-container--purpule">
-                                        <img src="../../assets/img/destination_icon4.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Tuscany</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Italy</span>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">SPORT</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div style="background-color: #1bbc9b;" class="package__item-detail-type-icon package__item-detail-type-icon--purple">+ 1</div>
-                                            </div>
-                                        </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old">730</div>
-                                            <div class="package__item-detail-price-current">950 $</div>
-                                        </div>
-                                    </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <div style="background-color: #1bbc9b;" class="btn package__item-btn package__item-btn--purple">ADD</div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     
+        </div>
+
+
         <!-- Footer -->
-        <footer style="background-image: url(../../assets/img/footer-background.jpg);" class="footer">
+        <div style="background-image: url(../../assets/img/footer-background.jpg);" class="footer">
             <div class="grid wide">
                 <div class="row footer-with-search-container">
                     <div class="footer-with-search">
@@ -1118,16 +925,16 @@
                     </div>
                 </div>
             </div>
-        </footer>
+        </div>
         <div class="buy hide-on-tablet-mobile">
-            <div class="buy-main">
+            <a href="../../cart/cart.php" class="buy-main">
                 <i class="ti-shopping-cart buy-main-icon"></i>
-            </div>
+            </a>
             <div class="buy-sub">
                 <i class="fas fa-fire buy-sub-icon"></i>
             </div>
         </div>
-        
     </div>
+
 </body>
 </html>

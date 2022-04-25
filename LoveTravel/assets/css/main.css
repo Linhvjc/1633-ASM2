@@ -409,8 +409,10 @@
 }
 
 .navbar-user__img {
-    height: 34px;
+    height: 36px;
+    width: 40px;
     border-radius: 50%;
+    border: 2px solid #ccc;
 }
 
 .navbar-user:hover .navbar-user__list {
@@ -1366,6 +1368,19 @@
     max-width: 100px;
 }
 
+.addcart-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addcart-quantity {
+    display: block;
+    border-radius: 8px;
+    border: 1px solid #a79a93;
+    outline: none;
+    height: 30px;
+}
+
 /* Buy (fixed) */
 .buy {
     cursor: pointer;
@@ -1586,3 +1601,5 @@
     font-size: 1.2rem;
     letter-spacing: 2px;
 }
+
+

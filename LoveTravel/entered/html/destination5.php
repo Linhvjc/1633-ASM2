@@ -1,25 +1,62 @@
+<?php
+    session_start();
+    $logined=0;
+    if(!isset($_SESSION['luottruycap'])) $_SESSION['luottruycap']=0;
+    else $_SESSION['luottruycap']+=1;
+
+    if(isset($_COOKIE['user'])&&isset($_COOKIE['pass'])){
+        echo "Cookie đã đăng ký là: ".$_COOKIE['user']." - ".$_COOKIE['pass'];
+    }
+
+    if(isset($_GET['delc'])&&($_GET['delc']==1)){
+        setcookie("user","",time()-(86400*7));
+        setcookie("pass","",time()-(86400*7));
+        echo "<br><font color='red'>Bạn đã xóa cookie</font>";
+    }
+
+    if(isset($_POST['login'])&&($_POST['login'])){
+        $user=$_POST['user'];
+        $pass=$_POST['pass'];
+        if(($user=="demo")&&($pass=="demo")){
+            $_SESSION['user']=$user;
+            $_SESSION['pass']=$pass;
+            $logined=1;
+            $msg= "<br><font color='blue'>Các bạn đăng nhập thành công</font>";
+        }else{
+            $logined=0;
+            $msg= "<br><font color='red'>Vui lòng đăng nhập</font>";
+        }
+        if(isset($_POST['ghinho'])&&($_POST['ghinho'])){
+            setcookie("user",$user,time()+(86400*7));
+            setcookie("pass",$pass,time()+(86400*7));
+            $msgcookie="<br>Đã ghi nhận cookie!";
+        }
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../assets/img/Icon.jpg">
+    <link rel="icon" type="image/x-icon" href="../../assets/img/Icon.jpg">
 
     <!-- reset css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     
-    <link rel="stylesheet" href="../assets/css/base.css">
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/destination.css">
-    <link rel="stylesheet" href="../assets/css/grid.css">
-    <link rel="stylesheet" href="../assets/css/responsive.css">
-    <link rel="stylesheet" href="../assets/css/destinationresponsive.css">
+    <link rel="stylesheet" href="../../assets/css/base.css">
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/destination.css">
+    <link rel="stylesheet" href="../../assets/css/grid.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="../../assets/css/destinationresponsive.css">
      <!-- fa icon -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     
      <!-- Themify icon -->
-     <link rel="stylesheet" href="../assets/themify-icons/themify-icons.css">
+     <link rel="stylesheet" href="../../assets/themify-icons/themify-icons.css">
      <!-- Roboto font -->
      <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
      <title>Love Travel - Destination</title>
@@ -27,17 +64,17 @@
 <body>
     <div class="web">
         <!-- Header -->
-        <header class="header-destination" style="background-image: url(../assets/img/header-background-destination2.jpg); filter: brightness(95%);">
+        <header class="header-destination" style="background-image: url(../../assets/img/header-background-destination5.jpg);">
             <div class="navbar">
                 <div class="grid wide navbar--grid">
                     <div class="row navbar--wrap">
-                        <a href="../index.php" class="navbar__logo-link">
-                            <img src="../assets/img/homelogo.png" alt="" class="navbar__logo-img">
+                        <a href="index.php" class="navbar__logo-link">
+                            <img src="../../assets/img/homelogo.png" alt="" class="navbar__logo-img">
                         </a>
     
                         <ul class="navbar__list hide-on-tablet-mobile">
                             <li class="navbar__item">
-                                <a href="../index.php" class="navbar__item-link">HOME</a>
+                                <a href="index.php" class="navbar__item-link">HOME</a>
                             </li>
                             <li class="navbar__item">
                                 <a href="#" class="navbar__item-link">PACKAGES</a>
@@ -385,18 +422,71 @@
                                     </li>
                                 </ul>
                             </li>
-                            
+                            <li class="navbar__item">
+                                <a href="#" class="navbar__item-link">CONTACT</a>
+                                <ul class="navbar__item-list">
+                                    <li class="navbar__item-item ">
+                                        <a href="#" class="navbar__item-item-link">Contact 1</a>
+                                        <div class="hot-active">
+                                            <span class="hot-active__text">HOT</span>
+                                        </div>
+                                        <div class="new-active">
+                                            <span class="new-active__text">NEW</span>
+                                        </div>
+                                        <div class="row-navbar">
+                                            <i class="row-navbar__icon fas fa-angle-right"></i>
+                                        </div>
+                                    </li>
+                                    <li class="navbar__item-item navbar__item-item--hot">
+                                        <a href="#" class="navbar__item-item-link">Contact 2</a>
+                                        <div class="hot-active">
+                                            <span class="hot-active__text">HOT</span>
+                                        </div>
+                                        <div class="new-active">
+                                            <span class="new-active__text">NEW</span>
+                                        </div>
+                                        <div class="row-navbar">
+                                            <i class="row-navbar__icon fas fa-angle-right"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
-                        <a href="./booknow.html" class="btn btn-purple hide-on-tablet-mobile">
+                        <a href="./booknow.php" class="btn btn-purple hide-on-tablet-mobile">
                             <span>BOOK NOW</span>
                         </a>
-                        <a href="../user/login.php" class="navbar__option-sign-in hide-on-tablet-mobile">
-                            <span class="navbar__option-sign-in-text">SIGN IN</span>
-                        </a>
+                        
+                        <div class="navbar-user">
+                            
+                            <?php
+                                include '../../user/config.php';
+                                $user_id = $_SESSION['user_id'];
+                                $select = mysqli_query($conn, "SELECT * FROM `user_form` WHERE id = '$user_id'") or die('query failed');
+                                if(mysqli_num_rows($select) > 0){
+                                    $fetch = mysqli_fetch_assoc($select);
+                                }
+                            ?>
 
-                        <a href="../user/register.php" class="navbar__option-sign-in hide-on-tablet-mobile">
-                            <span class="navbar__option-sign-in-text">SIGN UP</span>
-                        </a>
+                            <form action="" method="post" enctype="multipart/form-data">
+                            <?php
+                                if($fetch['image'] == ''){
+                                    echo '<img class="navbar-user__img" src="../../user/images/default-avatar.png">';
+                                }else{
+                                    echo '<img class="navbar-user__img" src="../../user/uploaded_img/'.$fetch['image'].'">';
+                                }                                   
+                            ?>
+                            </form>
+
+                            <ul class="navbar-user__list">
+                                <li class="navbar-user__item">
+                                    <a href="../../user/update_profile.php" class="navbar-user__item-link">My profile</a>
+                                </li>
+                                <li class="navbar-user__item navbar-user__item--red">
+                                    <a href="../../user/logout.php" class="navbar-user__item-link navbar-user__item-link--red">Log out</a>
+                                </li>
+                            </ul>
+                        </div>
+
     
                         <label for="option-checkbox" class="navbar__option">
                             <i class="ti-align-justify navbar__option-icon"></i>
@@ -417,7 +507,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package1.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package1.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Berlin</span>
@@ -430,7 +520,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package2.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package2.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Hong Kong</span>
@@ -443,7 +533,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package3.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package3.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">San Francisco</span>
@@ -458,14 +548,14 @@
                                 <div class="navbar__option-destination-child">
                                     <div class="destination-child ">
                                         <div class="destination-container">
-                                            <div style="background-image: url(../assets/img/destination-1.jpg);" class="destination-item__background">
+                                            <div style="background-image: url(../../assets/img/destination-1.jpg);" class="destination-item__background">
                                                 <div class="destination-item">
                                                     <div class="destination-item__text">
                                                         <div class="destination-item__name">Europe</div>
                                                         <div class="destination-item__package">3 PACKAGES</div>
                                                     </div>
                                                     <div class="destination-item__icon">
-                                                        <img src="../assets/img/destination_icon1.png" alt="" class="destination-item__icon-img">
+                                                        <img src="../../assets/img/destination_icon1.png" alt="" class="destination-item__icon-img">
                                                     </div>
                                                 </div>
                                             </div>
@@ -499,7 +589,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package4.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package4.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Tuscany</span>
@@ -512,7 +602,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package5.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package5.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Amsterdam</span>
@@ -525,7 +615,7 @@
                                 </div>
                                 <div class="navbar__option-destination">
                                     <div class="navbar__option-destination-photo">
-                                        <img src="../assets/img/package6.jpg" alt="" class="navbar__option-destination-img">
+                                        <img src="../../assets/img/package6.jpg" alt="" class="navbar__option-destination-img">
                                     </div>
                                     <div class="navbar__option-destination-detail">
                                         <span class="navbar__option-destination-nation">Phuket</span>
@@ -545,7 +635,7 @@
     
             <div class="grid wide  ">
                 <div class="header-destination-title">
-                    <span class="header-destination-title-text">Thailandia</span>
+                    <span class="header-destination-title-text">Netherlands</span>
                 </div>
             </div>
         </header>
@@ -576,27 +666,27 @@
                             <div class="body-info__container">
                                 <div class="body-info__item">
                                     <div class="body-info__item-photo">
-                                        <img src="../assets/img/type-info1.png" alt="" class="body-info__item-img">
+                                        <img src="../../assets/img/type-info1.png" alt="" class="body-info__item-img">
                                     </div>
                                     <div class="body-info__item-info">
                                         <span class="body-info__item-info-heading">PACKAGES</span>
-                                        <span class="body-info__item-info-description">1 Tours in Thailandia</span>
+                                        <span class="body-info__item-info-description">1 Tours in Netherlands</span>
                                     </div>
                                 </div>
     
                                 <div class="body-info__item">
                                     <div class="body-info__item-photo">
-                                        <img src="../assets/img/type-info2.svg" alt="" class="body-info__item-img">
+                                        <img src="../../assets/img/type-info2.svg" alt="" class="body-info__item-img">
                                     </div>
                                     <div class="body-info__item-info">
-                                        <span class="body-info__item-info-heading">Europe</span>
+                                        <span class="body-info__item-info-heading">Netherlands</span>
                                         <span class="body-info__item-info-description">Check the best Tours</span>
                                     </div>
                                 </div>
     
                                 <div class="body-info__item">
                                     <div class="body-info__item-photo">
-                                        <img src="../assets/img/type-info3.svg" alt="" class="body-info__item-img">
+                                        <img src="../../assets/img/type-info3.svg" alt="" class="body-info__item-img">
                                     </div>
                                     <div class="body-info__item-info">
                                         <span class="body-info__item-info-heading">Contact Us</span>
@@ -619,46 +709,54 @@
                         </div>
                     </div>
                     <div class="row">
+                        <!-- Amsterdam -->
                         <div class="col l-4 m-12 c-12">
-                            <div class="package__item">
-                                <div class="package__item-img">
-                                    <img src="../assets/img/package7.jpg" alt="" class="package__item-img-background">
-                                    <div class="package__item-img-icon-container package__item-img-icon-container--yellow">
-                                        <img src="../assets/img/destination_icon2.png" alt="" class="package__item-img-icon">
-                                    </div>
-                                </div>
-                                <div class="package__item-text">
-                                    <div class="package__item-heading">
-                                        <span class="package__item-heading-country">Phuket</span>
-                                        <div class="package__item-heading-area">
-                                            <i class="package__item-heading-area-icon ti-location-pin"></i>
-                                            <span class="package__item-heading-area-text">Thailandia</span>
+                            <form action="../../cart/cart.php" method ="post">
+                                <input type="hidden" name="tensp" value="Amsterdam">
+                                <input type="hidden" name="gia" value="1500">
+                                <input type="hidden" name="hinh" value="../../assets/img/package8.jpg">
+                                <div class="package__item">
+                                    <div class="package__item-img">
+                                        <img src="../../assets/img/package8.jpg" alt="" class="package__item-img-background">
+                                        <div style="background: linear-gradient(to right, #f3a46b 0%, #f3c96b 100%);" class="package__item-img-icon-container package__item-img-icon-container--blue">
+                                            <img src="../../assets/img/destination_icon5.png" alt="" class="package__item-img-icon">
                                         </div>
                                     </div>
-                                    <div class="package__item-detail">
-                                        <div class="package__item-detail-type">
-                                            <div class="package__item-detail-type-line">
-                                                <span class="package__item-detail-type-line-text">RELAX</span>
-                                                <div class="package__item-detail-type-icon">+ 1</div>
-                                            </div>
-                                            <div class="package__item-detail-type-line package__item-detail-type-line--addition">
-                                                <span class="package__item-detail-type-line-text">CULTURAL</span>
-                                                <div class="package__item-detail-type-icon package__item-detail-type-icon--yellow">+ 1</div>
+                                    <div class="package__item-text">
+                                        <div class="package__item-heading">
+                                            <span class="package__item-heading-country">Amsterdam</span>
+                                            <div class="package__item-heading-area">
+                                                <i class="package__item-heading-area-icon ti-location-pin"></i>
+                                                <span class="package__item-heading-area-text">Netherlands</span>
                                             </div>
                                         </div>
-                                        <div class="package__item-detail-price">
-                                            <div class="package__item-detail-price-old"></div>
-                                            <div class="package__item-detail-price-current">1200 $</div>
+                                        <div class="package__item-detail">
+                                            <div class="package__item-detail-type">
+                                                <div class="package__item-detail-type-line">
+                                                    <span class="package__item-detail-type-line-text">HISTORY</span>
+                                                    <div class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                                <div class="package__item-detail-type-line package__item-detail-type-line--addition">
+                                                    <span class="package__item-detail-type-line-text">CULTURAL</span>
+                                                    <div style="background-color: #f3a46b;" class="package__item-detail-type-icon">+ 1</div>
+                                                </div>
+                                            </div>
+                                            <div class="package__item-detail-price">
+                                                <div class="package__item-detail-price-old"></div>
+                                                <div class="package__item-detail-price-current">1500 $</div>
+                                            </div>
+                                        </div>
+                                        <div class="package__item-description">
+                                            <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
+                                        </div>
+                                        <div class="addcart-container">
+                                            <input style="background-color: #f3a46b;" type="submit" name="addcart" class="btn package__item-btn" value="ADD">
+                                            <input class="addcart-quantity" type="number" name="soluong" min="1" max="10" value="1">
                                         </div>
                                     </div>
-                                    <div class="package__item-description">
-                                        <span class="package__item-description-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut efficitur ante. Donec dapibus dictum scelerisque.</span>
-                                    </div>
-                                    <a href="../user/login.php" class="btn package__item-btn package__item-btn--yellow">ADD</a>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -667,7 +765,7 @@
 
 
         <!-- Footer -->
-        <div style="background-image: url(../assets/img/footer-background.jpg);" class="footer">
+        <div style="background-image: url(../../assets/img/footer-background.jpg);" class="footer">
             <div class="grid wide">
                 <div class="row footer-with-search-container">
                     <div class="footer-with-search">
@@ -685,7 +783,7 @@
                     <div class="grid__full-width">
                         <div class="footer-container">
                             <div class="footer-social">
-                                <img src="../assets/img/logo-footer.png" alt="" class="footer-social__logo">
+                                <img src="../../assets/img/logo-footer.png" alt="" class="footer-social__logo">
                                 <span class="footer-social__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ut diam et nibh condimentum venenatis eu ac magnasin. Quisque interdum est mauris, eget ullamcorper.</span>
                                 <div class="footer-social__icon">
                                     <a href="#" class="footer-social__icon-link">
@@ -794,7 +892,7 @@
             </div>
         </div>
         <div class="buy hide-on-tablet-mobile">
-            <a href="../user/login.php" class="buy-main">
+            <a href="../../cart/cart.php" class="buy-main">
                 <i class="ti-shopping-cart buy-main-icon"></i>
             </a>
             <div class="buy-sub">
