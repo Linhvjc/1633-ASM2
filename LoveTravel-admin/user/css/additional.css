@@ -1,0 +1,100 @@
+.container-right__logo-img {
+    height: 34px;
+}
+
+.form-group {
+    margin-bottom: 6px;
+}
+
+.input-form {
+    margin-bottom: 4px;
+    height: 30px;
+}
+
+
+
+.input-form:focus {
+    border-bottom: 2px solid rgb(58, 207, 195);
+}
+
+.input-form--img {
+    border: none;
+    padding-left: 0;
+    border-radius: 0;
+}
+
+.input-form--img:focus {
+    border: none;
+}
+
+.invalid {
+    border-bottom: 2px solid rgb(248, 86, 86);
+}
+
+.form-message {
+    color: rgb(248, 86, 86);
+    font-size: 12px;
+    display: block;
+    height: 1.4rem;
+}
+
+.container-right__content {
+    padding: 30px 70px 30px;
+ }
+
+ .container-right__welcome {
+     font-size: 2.6rem;
+     letter-spacing: 1.5px;
+     margin-top: 14px;
+ }
+
+ .container-right__form {
+    margin-top: 20px;
+} 
+
+.form-btn {
+    margin-top: 10px;
+}
+
+/* update profile */
+
+.update-profile {
+    height: 100%;
+    padding: 120px 300px 40px;
+}
+
+.update-profile__content {
+    border-radius: 12px;
+    background-color: var(--white-color);
+    padding: 50px 70px;
+}
+
+.update-profile__heading {
+    font-weight: bold;
+    color: #029e91;
+    font-size: 3rem;
+}
+
+.update-profile__img {
+    height: 200px;
+    width: 220px;
+    border-radius: 50%;
+}
+
+.update-profile__img-btn {
+    display: block;
+    margin-left: 48px;
+    margin-top: 6px;
+}
+
+
+.form-profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-user {
+    margin-left: 24px;
+}

@@ -1,0 +1,104 @@
+:root {
+    --white-color: #fff;
+    --text-color: #333;
+    --border-color: #dbdbdb;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.6rem;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    z-index: 0;
+}
+
+body {
+    font-size: 1.4rem;
+}
+
+ul {
+    list-style-type: none;
+   padding-left: 0; 
+}
+
+a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+}
+
+
+
+/* grid responsive */
+.grid {
+    width: 1220px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.grid__full-width {
+    width: 100%; 
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.grid__half-width {
+    width: 50%;
+}
+
+.grid__row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.grid__column-4 {
+    width: calc(100% / 12 * 4);
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.grid__column-8 {
+    width: calc(100% / 12 * 8);
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+/* btn */
+
+.btn {
+    min-width: 94px;
+    height: 36px;
+    padding: 0px 15px;
+    border-radius: 24px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.4rem;
+    line-height: 36px;
+    letter-spacing: 3px;
+    color: var(--white-color);
+    border: none;
+}
+
+.btn-purple {
+    background-color: #BA71DA;
+}
+
+/* Animation */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

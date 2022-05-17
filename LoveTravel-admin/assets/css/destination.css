@@ -1,0 +1,131 @@
+.web {
+    overflow: hidden;
+}
+
+.header-destination {
+    position: relative;
+    min-height: 310px;
+    background-position: center;
+    background-size: cover;
+}
+
+.navbar {
+    background-color: rgba(0 , 0 , 0 , 0.2);
+}
+
+.header-destination-title {
+    position: absolute;
+    top: 224px;
+}
+
+.header-destination-title-text {
+    font-size: 3.4rem;
+    color: var(--white-color);
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* Body desctiontion */
+
+.body-destination {
+    margin-top: 70px;
+}
+
+.body-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.body-description-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.body-description-child {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    margin: 0 12px 56px;
+}
+
+.body-description-left {
+    display: inline-block;
+    width: 20%;
+    font-size: 7.4rem;
+    color: #9a9a9a;
+}
+
+.body-description-right {
+    display: inline-block;
+    width: 80%;
+    line-height: 2.4rem;
+    letter-spacing: 1.5px;
+    color: #9a9a9a;
+}
+
+.body-description-child-text {
+    line-height: 2.4rem;
+    letter-spacing: 1.5px;
+    color: #9a9a9a;
+}
+
+.body-description-bottom {
+    display: inline-block;
+    width: 100%;
+    line-height: 2.4rem;
+    letter-spacing: 1.5px;
+    color: #9a9a9a;
+}
+
+.body-info {
+    border: 1px solid #ece7e7;
+}
+
+.body-info__container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.body-info__item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.body-info__item-photo {
+    background-color: #14b9d5;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-info__item-img {
+    width: 26px;
+    height: 26px;
+}
+
+.body-info__item-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 14px;
+}
+
+.body-info__item-info-heading {
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.body-info__item-info-description {
+    letter-spacing: 1.5px;
+    color: #9a9a9a;
+    font-size: 1.5rem;
+}
+
+.body-description, .body-info {
+    margin-bottom: 62px;
+}

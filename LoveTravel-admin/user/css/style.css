@@ -1,0 +1,174 @@
+body{
+   font-family: Avenir, Helvetica, Sans-serif;
+   -webkit-font-smoothing: antialiased;
+   background: white;
+   }
+
+.page-container {
+   display: flex;
+   padding: 120px 140px 40px;
+   background-color: #6c6968;
+}
+
+.container-left {
+   width: 50%;
+   background-image: url(../../assets/img/page-left.jpg);
+   background-position: center;
+   background-size: cover;
+   background-repeat: no-repeat;
+   position: relative;
+}
+
+.container-left__content {
+   display: flex;
+   position: absolute;
+   bottom: 50px;
+   flex-direction: column;
+   text-align: center;
+   padding: 0 100px;
+}
+
+.container-left__content-main {
+   font-size: 2rem;
+   color: #fff;
+   font-weight: 700;
+   margin-bottom: 16px;
+   display: block;
+   font-family: Zapf Chancery, cursive;
+   
+}
+
+.container-left__content-sub {
+   color: #fff;
+   font-family: Zapf Chancery, cursive;
+}
+
+.container-right {
+   background-color: #fff;
+   width: 50%;
+}
+
+.container-right__content {
+   padding: 60px 70px 40px;
+}
+
+.container-right__logo-img {
+   height: 50px;
+}
+
+.container-right__logo {
+   display: block;
+   text-align: center;
+}
+
+.container-right__welcome {
+   display: block;
+   text-align: center;
+   margin-top: 70px;
+   color: #aaa;
+   font-size: 2rem;
+   letter-spacing: 1.5px;
+}
+
+.container-right__form {
+   margin-top: 50px;
+}
+
+.label-form {
+   font-size: 1.3rem;
+   color: #aaa;
+   display: block;
+   margin-bottom: 4px;
+}
+
+
+.input-form {
+   display: block;
+   border: none;
+   width: 100%;
+   border-bottom: 1px solid #aaa;
+   height: 40px;
+   font-size: 1.6rem;
+   margin-bottom: 10px;
+   letter-spacing: 1.5px;
+   font-weight: 300;
+   color: #000;
+   outline: none;
+}
+
+
+.btn-form__container {
+   text-align: right;
+}
+
+.form-btn {
+   border: none;
+   background-color: #6c6968;
+   color: var(--white-color);
+   font-weight: 500;
+   font-size: 1.5rem;
+   letter-spacing: 1px;
+   padding-left: 40px;
+   padding-right: 40px;
+   margin-top: 30px;
+}
+
+.suggested-text {
+   color: #aaa;
+   text-align: center;
+   margin-top: 20px;
+}
+
+.suggested-link {
+   color: #aaa;
+   display: inline-block;
+   text-decoration: underline;
+}
+
+.message {
+   color: red;
+   font-size: 1.6rem;
+}
+
+.login__google {
+   display: block; 
+   margin-top: 20px;
+}
+
+.login__google-img {
+   display: block;
+   height: 60px;
+   margin: 0 auto;
+}
+
+/* background */
+.background-login{
+   background: linear-gradient(270deg, #351111, #3f3015, #3b3d15, #2c4115, #153610, #134440, #0d1038, #3a113a, #3b1129, #381012);
+   background-size: 2000% 2000%;
+   
+   -webkit-animation: AnimationName 30s ease infinite;
+   -moz-animation: AnimationName 30s ease infinite;
+   -o-animation: AnimationName 30s ease infinite;
+   animation: AnimationName 30s ease infinite;
+   }
+   
+   @-webkit-keyframes AnimationName {
+       0%{background-position:0% 50%}
+       50%{background-position:100% 50%}
+       100%{background-position:0% 50%}
+   }
+   @-moz-keyframes AnimationName {
+       0%{background-position:0% 50%}
+       50%{background-position:100% 50%}
+       100%{background-position:0% 50%}
+   }
+   @-o-keyframes AnimationName {
+       0%{background-position:0% 50%}
+       50%{background-position:100% 50%}
+       100%{background-position:0% 50%}
+   }
+   @keyframes AnimationName {
+       0%{background-position:0% 50%}
+       50%{background-position:100% 50%}
+       100%{background-position:0% 50%}
+   }

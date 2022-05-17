@@ -1,0 +1,26 @@
+/* Mobile & tablet */
+@media (max-width: 1023px) {
+    
+}
+
+/* Tablet */
+@media (min-width: 740px) and (max-width: 1023px) {
+    
+    
+}
+
+/* Mobile */
+@media (max-width: 739px) {
+    .header-destination-title {
+        margin-left: 30px;
+    }
+    
+    .body-destination {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .body-description-left {
+        display: none;
+    }
+}
